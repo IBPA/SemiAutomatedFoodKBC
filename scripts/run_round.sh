@@ -40,7 +40,7 @@ PATH_TRAIN_POOL=outputs/data_generation/train_pool_small.tsv
 PATH_VAL=outputs/data_generation/val_small.tsv
 PATH_TEST=outputs/data_generation/test_small.tsv
 
-cd food_atlas/data_generation
+cd src/data_generation
 python prepare_training_data.py \
     --sampling_strategy=$AL \
     --run=$RUN \
@@ -50,7 +50,7 @@ python prepare_training_data.py \
     --train_pool_filepath=../../$PATH_TRAIN_POOL
 cd ../..
 
-python -m food_atlas.entailment.run_grid_search \
+python -m src.entailment.run_grid_search \
     outputs/data_generation/$AL/run_${RUN}/round_${ROUND}/train.tsv \
     $PATH_VAL \
     biobert \
@@ -60,7 +60,7 @@ python -m food_atlas.entailment.run_grid_search \
     --nums-epochs 3,4 \
     --seeds $RANDOM_SEED \
 
-python -m food_atlas.entailment.run_best_model_evaluation \
+python -m src.entailment.run_best_model_evaluation \
     outputs/data_generation/$AL/run_${RUN}/round_${ROUND}/train.tsv \
     $PATH_VAL \
     $PATH_TEST \
@@ -69,13 +69,13 @@ python -m food_atlas.entailment.run_best_model_evaluation \
     $PATH_OUTPUT/eval_best_model \
     --seeds $RANDOM_SEED \
 
-python -m food_atlas.entailment.run_unlabeled_data_prediction \
+python -m src.entailment.run_unlabeled_data_prediction \
     outputs/data_generation/$AL/run_${RUN}/round_${ROUND}/to_predict.tsv \
     biobert \
     $PATH_OUTPUT/eval_best_model \
     --path-output-data-to-predict outputs/data_generation/$AL/run_${RUN}/round_${ROUND}/predicted.tsv \
 
-python -m food_atlas.entailment.run_unlabeled_data_prediction \
+python -m src.entailment.run_unlabeled_data_prediction \
     $PATH_TEST \
     biobert \
     $PATH_OUTPUT/eval_best_model \
