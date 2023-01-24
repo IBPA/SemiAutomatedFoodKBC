@@ -1,12 +1,10 @@
 #!/bin/bash
 
-set -e
-
-#SBATCH --job-name=fa_round
+#SBATCH --job-name=al_round
 #SBATCH --mail-type=ALL
-#SBATCH --mail-user=fzli@ucdavis.edu
-#SBATCH --output=/home/lfz/git/FoodAtlas/logs/%j.out
-#SBATCH --error=/home/lfz/git/FoodAtlas/logs/%j.err
+#SBATCH --mail-user=your@email.com
+#SBATCH --output=/your/path/to/logs/%j.out
+#SBATCH --error=/your/path/to/logs/%j.err
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=8
@@ -37,7 +35,7 @@ RANDOM_SEED=$((RANDOM_SEED * 10000 + RUN))
 
 echo $RANDOM_SEED
 
-PATH_OUTPUT=/data/lfz/projects/FoodAtlas/outputs/entailment_model/$AL/run_${RUN}/round_${ROUND}
+PATH_OUTPUT=/your/path/to/outputs/$AL/run_${RUN}/round_${ROUND}
 PATH_TRAIN_POOL=outputs/data_generation/train_pool_small.tsv
 PATH_VAL=outputs/data_generation/val_small.tsv
 PATH_TEST=outputs/data_generation/test_small.tsv

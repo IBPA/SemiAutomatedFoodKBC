@@ -1,10 +1,10 @@
 #!/bin/bash
 
-#SBATCH --job-name=fa_stratified
+#SBATCH --job-name=al_stratified
 #SBATCH --mail-type=ALL
-#SBATCH --mail-user=fzli@ucdavis.edu
-#SBATCH --output=/home/lfz/git/FoodAtlas/logs/%j.out
-#SBATCH --error=/home/lfz/git/FoodAtlas/logs/%j.err
+#SBATCH --mail-user=your@email.com
+#SBATCH --output=/your/path/to/logs/%j.out
+#SBATCH --error=/your/path/to/logs/%j.err
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=8
