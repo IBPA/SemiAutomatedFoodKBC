@@ -10,7 +10,7 @@ from tqdm import tqdm
 
 def get_test_prob_result(
         run_ids,
-        active_learning_strategies=['certain_pos', 'stratified', 'uncertain']):
+        active_learning_strategies):
     PATH_REUSLT = "~/git/FoodAtlas/outputs/data_generation/{}/run_{}/"\
         "round_{}/test_probs.tsv"
 
@@ -33,12 +33,10 @@ def get_test_prob_result(
     return result
 
 
-def plot_curves(
+def plot_curves_all(
         run_ids,
-        active_learning_strategies=['certain_pos', 'stratified', 'uncertain'],
+        active_learning_strategies,
         path_save=None):
-    """
-    """
     result = get_test_prob_result(
         run_ids,
         active_learning_strategies,
@@ -62,25 +60,52 @@ def plot_curves(
         ap = average_precision_score(labels_total, probs_total)
         auroc = roc_auc_score(labels_total, probs_total)
 
-        # sns.lineplot(
-        #     x=rec,
-        #     y=prec,
-        #     color='#e6e6e6',
-        #     label=al,
-        #     ax=axs[0],
-        # )
-        # sns.lineplot(
-        #     x=fpr,
-        #     y=tpr,
-        #     color='#e6e6e6',
-        #     label=al,
-        #     ax=axs[1],
-        # )
+        sns.lineplot(
+            x=rec,
+            y=prec,
+            color='#e6e6e6',
+            label=al,
+            ax=axs[0],
+        )
+        sns.lineplot(
+            x=fpr,
+            y=tpr,
+            color='#e6e6e6',
+            label=al,
+            ax=axs[1],
+        )
         print(
             f"{al}\n"
             f"    average precision: {ap}\n"
             f"    auroc            : {auroc}"
         )
+
+    axs[0].set_title('Precision-Recall Curve')
+    axs[0].set_xlabel('Recall')
+    axs[0].set_ylabel('Precision')
+
+    axs[1].set_title('ROC Curve')
+    axs[1].set_xlabel('False Positive Rate')
+    axs[1].set_ylabel('True Positive Rate')
+
+    if path_save is not None:
+        plt.savefig(path_save)
+    plt.close()
+
+
+def plot_curves_average(
+        run_ids,
+        active_learning_strategies,
+        path_save=None):
+    result = get_test_prob_result(
+        run_ids,
+        active_learning_strategies,
+    )
+
+    ALPHA = 0.1
+    fig, axs = plt.subplots(1, 2, figsize=(12, 6))
+    for i, al in enumerate(active_learning_strategies):
+        result_al = result[result['al'] == al]
 
         # Plot all curves.
         aps = []
@@ -93,23 +118,23 @@ def plot_curves(
                 aps += [average_precision_score(labels, row.probs)]
                 aurocs += [roc_auc_score(labels, row.probs)]
 
-                # sns.lineplot(
-                #     x=rec,
-                #     y=prec,
-                #     color='#e6e6e6',
-                #     alpha=ALPHA,
-                #     label=al if ir == 0 else None,
-                #     ax=axs[0],
-                # )
-                # sns.lineplot(
-                #     x=fpr,
-                #     y=tpr,
-                #     hue_order=active_learning_strategies,
-                #     color='#e6e6e6',
-                #     alpha=ALPHA,
-                #     label=al if ir == 0 else None,
-                #     ax=axs[1],
-                # )
+                sns.lineplot(
+                    x=rec,
+                    y=prec,
+                    color='#e6e6e6',
+                    alpha=ALPHA,
+                    label=al if ir == 0 else None,
+                    ax=axs[0],
+                )
+                sns.lineplot(
+                    x=fpr,
+                    y=tpr,
+                    hue_order=active_learning_strategies,
+                    color='#e6e6e6',
+                    alpha=ALPHA,
+                    label=al if ir == 0 else None,
+                    ax=axs[1],
+                )
                 pbar.update(1)
 
         print(
