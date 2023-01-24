@@ -18,6 +18,17 @@ source ./env/bin/activate
 
 # Dectivate Python virtualenv
 deactivate
+
+# Activate Conda environment
+conda create -n mvenv python
+
+# Deactivate Conda environment
+conda deactivate
+```
+
+In your environment, please install python packages.
+```
+pip install -r requirement.txt
 ```
 
 ## Running
@@ -64,6 +75,21 @@ python post_process_annotation.py \
 	- ../../outputs/data_generation/train_pool.tsv
 	- ../../outputs/data_generation/val.tsv
 	- ../../outputs/data_generation/test.tsv
+
+
+### 5. Run the entailment model.
+
+Run the SLURM shell scripts to initiate the active learning sessions with the entailment model. This will take around tens of hours to several days depending on your GPUs. In both \*_run_\*.sh files, you need to configure:
+- SLURM configuration, e.g., email, log paths, etc.
+- PATH_OUTPUT, the path to store trained models, statistics, etc.
+
+```
+cd scripts
+./1_run_stratified.sh
+./2_run_uncertain.sh
+```
+
+After running the above, the model training and evaluation results can be found in PATH_OUTPUT. The visualization of the statistics can be found in the outputs/ directory under the root repo.
 
 
 ## Authors
