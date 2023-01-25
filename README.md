@@ -1,63 +1,118 @@
-# Title of the Project Goes Here
+# Semi-Automated Construction of Food Composition Knowledge Base
 
-Put a short description of what this project is about. You can optionally put figure like I did below. Usually, I find Figure 1 of the paper to be a good fit. I created ```images``` branch to store the all the images so that you can avoid them being in the master working tree. For more info and other ways to embed a image files to the README file, please refer to this [link](https://stackoverflow.com/questions/10189356/how-to-add-screenshot-to-readmes-in-github-repository). For more information on how to use markdown, please use this [link](https://guides.github.com/features/mastering-markdown/). You can use this repository as a template when creating your repository. Please use this [link](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/creating-a-repository-from-a-template) for more info on that. Finally, you can refer to the [LOVE repository](https://github.com/IBPA/LOVE) for sample.
+A food composition knowledge base, which stores the essential phyto-, micro-, and macro-nutrients of foods is useful for both research and industrial applications. Although many existing knowledge bases attempt to curate such information, they are often limited by time-consuming manual curation processes. Outside of the food science domain, natural language processing methods that utilize pre-trained language models have recently shown promising results for extracting knowledge from unstructured text. In this work, we propose a semi-automated framework for constructing a knowledge base of food composition from the scientific literature available online. To this end, we utilize a pre-trained BioBERT language model in an active learning setup that allows the optimal use of limited training data. Our work demonstrates how human-in-the-loop models are a step toward AI-assisted food systems that scale well to the ever-increasing big data.
 
-![Figure 1](/../images/Figure1.jpg?raw=true)
+![Figure 1](figures/Figure1.svg)
 
-## 1. Directories
+## Prerequisites
 
-In this section, you should describe briefly what each directory contains. I don't want to enforce same directory format for everyone since every project is different. Key here is to name the directories specific yet succint as possible. Please look at famous repositories like [scikit-learn](https://github.com/scikit-learn/scikit-learn) or [freeCodeCamp](https://github.com/freeCodeCamp/freeCodeCamp) for some ideas.
+This code has been tested with
+* Python 3.8
 
-* <code>[data](./data)</code>: Contains all data files.
-
-## 2. Getting Started
-
-Not all project is same. You can modify the headings below a little to be more suitable for your project. If you wish to release the repository as a package, please refer to this great [document](https://docs.google.com/document/d/1NZSE_JKInoYgkV7KUI4T5yO8QmFycwStMW_9PrR-IEE/edit) Fang created.
-
-### 2a. Prerequisites
-
-If you have some prerequisites such as python libraries or other tools that need to be installed in advance, you can specify them here. For instructions on how to run a code, always follow the format like the following:
-
+To prevent dependency problems, please use either virtualenv...
 ```
-# Code should be formatted like this.
-python3 hello_world.py
+# Activate Python virtualenv
+python3 -mvenv env
+source ./env/bin/activate
+
+# Dectivate Python virtualenv
+deactivate
 ```
-
-### 2b. Running
-
-Instructions on how to run the code goes here. All inline code should be written like this `python3 hello_world.py`.
-
+or conda...
 ```
-some code
+# Activate Conda environment
+conda create -n mvenv python
+
+# Deactivate Conda environment
+conda deactivate
 ```
 
-## 3. Authors
+In your environment, please install python packages.
+```
+pip install -r requirement.txt
+```
+
+## Running
+
+### 1. Query LitSense and Generate PH pairs.
+
+```
+cd src/data_generation
+python query_and_generate_ph_pairs.py
+```
+
+* Generates following output files.
+	- ../../outputs/data_generation/query_results.txt
+	- ../../outputs/data_generation/ph_pairs_{timestamp}.txt
+
+### 2. Generate pre-annotation.
+
+```
+python generate_pre_annotation.py \
+    --train_pre_annotation_filepath=../../outputs/data_generation/train_pool_pre_annotation.tsv
+```
+
+* Generates following output files.
+	- ../../outputs/data_generation/train_pool_pre_annotation.tsv
+	- ../../outputs/data_generation/val_pre_annotation.tsv
+	- ../../outputs/data_generation/test_pre_annotation.tsv
+
+### 3. (Manual) Annotate the pre_annotation files generated above. When finished, save the file names as below.
+
+* Save the annotated files as follows.
+	- ../../outputs/data_generation/train_pool_post_annotation.tsv
+	- ../../outputs/data_generation/val_post_annotation.tsv
+	- ../../outputs/data_generation/test_post_annotation.tsv
+
+### 4. Post process the annotation.
+
+```
+python post_process_annotation.py \
+    --train_post_annotation_filepath=../../outputs/data_generation/train_pool_post_annotation.tsv \
+    --train_filepath=../../outputs/data_generation/train_pool.tsv
+```
+
+* Generates following output files.
+	- ../../outputs/data_generation/train_pool.tsv
+	- ../../outputs/data_generation/val.tsv
+	- ../../outputs/data_generation/test.tsv
+
+
+### 5. Run the entailment model.
+
+Run the SLURM shell scripts to initiate the active learning sessions with the entailment model. This will take around tens of hours to several days depending on your GPUs. In both \*_run_\*.sh files, you need to configure:
+- SLURM configuration, e.g., email, log paths, etc.
+- PATH_OUTPUT, the path to store trained models, statistics, etc.
+
+```
+cd scripts
+./1_run_stratified.sh
+./2_run_uncertain.sh
+```
+
+After running the above, the model training and evaluation results can be found in PATH_OUTPUT. The visualization of the statistics can be found in the outputs/ directory under the root repo.
+
+
+## Authors
 
 * **Jason Youn** @ [https://github.com/jasonyoun](https://github.com/jasonyoun)
+* **Fangzhou Li** @ [https://github.com/fangzhouli](https://github.com/fangzhouli)
 
-## 4. Contact
+## Contact
 
 For any questions, please contact us at tagkopouloslab@ucdavis.edu.
 
-## 5. Citation
+## Citation
 
 Put citation here. Let's use the exactly same format that is used in our [lab page](http://tagkopouloslab.ucdavis.edu/?page_id=648).
 
-## 6. License
+## License
 
-This project is licensed under the GNU GPLv3 License. Please see the <code>[LICENSE](./LICENSE)</code> file for details.
+This project is licensed under theApache-2.0 License. Please see the <code>[LICENSE](./LICENSE)</code> file for details.
 
-## 7. FAQ
+## Acknowledgments
 
-If you have an FAQ, you can put them here. If not needed, just removed this section.
-
-* How do I do this?
-	* You don't now how to do that?
-
-1. You can also number them like this.
-	* Say what?
-
-## 8. Acknowledgments
-
-* Acknowledgements go here.
-* If there are people beta tested the code, help with its writing, etc. add them here.
+* We would like to thank the members of the Tagkopoulos lab for their suggestions, and Gabriel Simmons for the initial discussions.
+* This work was supported by...
+	- USDA-NIFA AI Institute for Next Generation Food Systems (AIFS), USDA-NIFA award number 2020-67021-32855
+	- NIEHS grant P42ES004699
