@@ -81,7 +81,7 @@ def main():
     print("Train shape after dropping duplicates by hypothesis_string: ", df_train.shape)
     print("Train distribution: ", Counter(df_train["answer"].tolist()))
     Path(args.train_filepath).parent.mkdir(parents=True, exist_ok=True)
-    df_train = df_train.head(1000)  # smaller sample for AAAI
+    df_train = df_train.head(1000)
     print(f"Saving training to: {args.train_filepath}")
     df_train.to_csv(args.train_filepath, sep='\t', index=False)
 
@@ -93,7 +93,7 @@ def main():
     print("Val shape after dropping duplicates by hypothesis_string: ", df_val.shape)
     print("Val distribution: ", Counter(df_val["answer"].tolist()))
     Path(args.val_filepath).parent.mkdir(parents=True, exist_ok=True)
-    df_val = df_val.head(300)  # smaller sample for AAAI
+    df_val = df_val.head(300)
     print(f"Saving validation to: {args.val_filepath}")
     df_val.to_csv(args.val_filepath, sep='\t', index=False)
 
@@ -105,7 +105,7 @@ def main():
     print("Test shape after dropping duplicates by hypothesis_string: ", df_test.shape)
     print("Test distribution: ", Counter(df_test["answer"].tolist()))
     Path(args.test_filepath).parent.mkdir(parents=True, exist_ok=True)
-    df_test = df_test.head(300)  # smaller sample for AAAI
+    df_test = df_test.head(300)
     print(f"Saving test to: {args.test_filepath}")
     df_test.to_csv(args.test_filepath, sep='\t', index=False)
 

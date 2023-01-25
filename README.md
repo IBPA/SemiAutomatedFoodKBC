@@ -9,8 +9,7 @@ A food composition knowledge base, which stores the essential phyto-, micro-, an
 This code has been tested with
 * Python 3.8
 
-To prevent dependency problems, please use either conda or virtualenv.
-
+To prevent dependency problems, please use either virtualenv...
 ```
 # Activate Python virtualenv
 python3 -mvenv env
@@ -18,7 +17,9 @@ source ./env/bin/activate
 
 # Dectivate Python virtualenv
 deactivate
-
+```
+or conda...
+```
 # Activate Conda environment
 conda create -n mvenv python
 
