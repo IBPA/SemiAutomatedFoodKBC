@@ -104,15 +104,24 @@ For any questions, please contact us at tagkopouloslab@ucdavis.edu.
 
 ## Citation
 
-Put citation here. Let's use the exactly same format that is used in our [lab page](http://tagkopouloslab.ucdavis.edu/?page_id=648).
+```
+@inproceedings{
+youn2023semiautomated,
+title={Semi-Automated Construction of Food Composition Knowledge Base},
+author={Jason Youn and Fangzhou Li and Ilias Tagkopoulos},
+booktitle={2nd AAAI Workshop on AI for Agriculture and Food Systems},
+year={2023},
+url={https://openreview.net/forum?id=4I7WLDmseD}
+}
+```
 
 ## License
 
-This project is licensed under theApache-2.0 License. Please see the <code>[LICENSE](./LICENSE)</code> file for details.
+This project is licensed under the Apache-2.0 License. Please see the <code>[LICENSE](./LICENSE)</code> file for details.
 
 ## Acknowledgments
 
-* We would like to thank the members of the Tagkopoulos lab for their suggestions, and Gabriel Simmons for the initial discussions.
+* We would like to thank the members of the Tagkopoulos lab for their suggestions and Gabriel Simmons for the initial discussions.
 * This work was supported by...
 	- USDA-NIFA AI Institute for Next Generation Food Systems (AIFS), USDA-NIFA award number 2020-67021-32855
 	- NIEHS grant P42ES004699
